@@ -12,6 +12,16 @@ grid[49:52, 49:52, 0] = [
     [1, 0, 1],
     [1, 1, 1]
 ]
+grid[49:52, 49:52, 1] = [
+    [0, 1, 0],
+    [1, 0, 1],
+    [0, 1, 0]
+]
+grid[49:52, 49:52, 2] = [
+    [1, 0, 1],
+    [0, 0, 0],
+    [1, 0, 1]
+]
 
 # Setup window to show images
 app = pg.mkQApp()
@@ -23,7 +33,13 @@ win.setCentralWidget(imv)
 win.show()
 
 def iterate(start_grid):
-    start_grid[:, :, 0] = convolve2d(start_grid[:, :, 0], [[1, 1, 1], [1, 0, 1], [1, 1, 1]], boundary="fill", mode="same") % 2
+    for dim in range(3):
+        start_grid[:, :, dim] = convolve2d(
+            start_grid[:, :, dim], 
+            [[1, 1, 1], [1, 0, 1], [1, 1, 1]], 
+            boundary="fill", 
+            mode="same"
+        ) % 4
     return start_grid
 
 # # Run Indefinitely
@@ -41,8 +57,8 @@ for _ in range(100):
     frames.append(grid.copy())
     grid = iterate(grid)
 data = np.array(frames)
-data = data.reshape((101, 101, 3, 100))
-imv.setImage(data, xvals=np.arange(data.shape[3]+1))
+print(data.shape)
+imv.setImage(data, xvals=np.arange(data.shape[0]+1))
 
 if __name__ == '__main__':
     app.exec_()
