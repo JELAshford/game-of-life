@@ -1,41 +1,59 @@
 # Conway's Game of Life - Hopefully done better than 21 y/o James
-# (10x faster than original grid and set implementation)
+# (100x faster than original grid and set implementation)
 from scipy.signal import convolve2d
-from itertools import product
+from pyqtgraph.Qt import QtCore, QtGui
 import pyqtgraph as pg
 import numpy as np
 
+# Mid/Neighbour behaviour is:
+# 1, (2, 3) = ON                OR  0, (3) = ON
+# 1, (1, 4, 5, 6, 7, 8) = OFF   OR  0, (1, 2, 4, 5, 6, 7, 8) = OFF
+# So need a situation where MID_VALUE + (2, 3) and 3 are distinct from
+# MID_VALUE + (1, 4, 5, 6, 7, 8) and (1, 2, 4, 5, 6, 7, 8)
+# for MID_VALUE in range(-10, 10):
+#     on_values = [MID_VALUE + 2, MID_VALUE + 3, 3]
+#     off_values = [MID_VALUE + v for v in (1, 4, 5, 6, 7, 8)] + [1, 2, 4, 5, 6, 7, 8]
+#     if not np.any([v in off_values for v in on_values]): 
+#         print(f"Succes! {MID_VALUE} as value for centre works")
+# Test it out! Let's use 7, I like 9, 10, 3 as the comparison numbers :D
+
 # Declare world variables
-MAP_SIZE = 100
-mainMat = np.random.randint(0,2,(MAP_SIZE, MAP_SIZE))
+MAP_SIZE = 500
+grid = np.random.randint(0,2,(MAP_SIZE, MAP_SIZE))
 
-# Activate graphics window
-window = pg.GraphicsWindow(title='The Game of Life')
-gol = window.addPlot(title='')
-# gol.showGrid(True, True, 1)
+# Setup window to show images
+app = pg.mkQApp()
+win = QtGui.QMainWindow()
+win.setWindowTitle('Self-Reproducing CA')
+win.resize(800,800)
+imv = pg.ImageView()
+win.setCentralWidget(imv)
+win.show()
 
-def iterate(start_matrix):
-    # Create new map of zeros
-    end_matrix = np.zeros((MAP_SIZE, MAP_SIZE))
-    # Count neighbours
-    counts = convolve2d(start_matrix, [[1, 1, 1], [1, 0, 1], [1, 1, 1]], boundary="fill", mode="same")
-    # Apply rules
-    for (x, y) in product(range(MAP_SIZE), range(MAP_SIZE)):
-        neighbours = counts[y, x]
-        alive = start_matrix[y, x]
-        if (neighbours == 3) or (alive and neighbours == 2):
-            end_matrix[y, x] = 1
-    return end_matrix
+def iterate(start_matrix, edges="fill"):
+    # Convolve over grid, with set centre weight, then test for "alive" values
+    counts = convolve2d(start_matrix, [[1, 1, 1], [1, 7, 1], [1, 1, 1]], boundary=edges, mode="same")
+    return (counts == 9) | (counts == 10) | (counts == 3)
 
-def draw(game_map):
-    # Clear map
-    gol.clear()
-    # Plot alive points
-    points = np.argwhere(game_map == 1)
-    gol.plot(points[:, 0].tolist(), points[:, 1].tolist(), pen=None, s=20., symbolBrush=(255, 255, 0), symbol='o')
-    # Process changes
-    pg.QtGui.QApplication.processEvents()
+# Run Indefinitely
+def update():
+    global grid
+    grid = iterate(grid)
+    imv.setImage(grid)
+timer = QtCore.QTimer()
+timer.timeout.connect(update)
+timer.start(20)
 
-while True:
-    mainMat = iterate(mainMat)
-    draw(mainMat)
+# Run for x frames and then view
+# import time
+# frames = []
+# for _ in range(100):
+#     frames.append(grid.T.copy())
+#     start = time.time()
+#     grid = iterate(grid)
+#     print(time.time()-start)
+# data = np.array(frames)
+# imv.setImage(data, xvals=np.arange(data.shape[0]+1))
+
+if __name__ == '__main__':
+    app.exec_()
