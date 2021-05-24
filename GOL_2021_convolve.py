@@ -24,7 +24,7 @@ grid = np.random.randint(0,2,(MAP_SIZE, MAP_SIZE))
 # Setup window to show images
 app = pg.mkQApp()
 win = QtGui.QMainWindow()
-win.setWindowTitle('Self-Reproducing CA')
+win.setWindowTitle('GOL with Scipy')
 win.resize(800,800)
 imv = pg.ImageView()
 win.setCentralWidget(imv)
@@ -45,13 +45,10 @@ timer.timeout.connect(update)
 timer.start(20)
 
 # Run for x frames and then view
-# import time
 # frames = []
 # for _ in range(100):
 #     frames.append(grid.T.copy())
-#     start = time.time()
 #     grid = iterate(grid)
-#     print(time.time()-start)
 # data = np.array(frames)
 # imv.setImage(data, xvals=np.arange(data.shape[0]+1))
 
