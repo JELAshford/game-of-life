@@ -31,7 +31,7 @@ win.setCentralWidget(imv)
 win.show()
 
 def iterate(start_matrix, edges="fill"):
-    # Convolve over grid, with set centre weight, then test for "alive" values
+    """Convolve over grid then test for "alive" values"""
     counts = convolve2d(start_matrix, [[1, 1, 1], [1, 7, 1], [1, 1, 1]], boundary=edges, mode="same")
     return (counts == 9) | (counts == 10) | (counts == 3)
 
@@ -45,12 +45,11 @@ timer.timeout.connect(update)
 timer.start(20)
 
 # Run for x frames and then view
-# frames = []
-# for _ in range(100):
+# frames = []; frame_count = 100
+# for _ in range(frame_count):
 #     frames.append(grid.T.copy())
 #     grid = iterate(grid)
-# data = np.array(frames)
-# imv.setImage(data, xvals=np.arange(data.shape[0]+1))
+# imv.setImage(np.array(frames), xvals=np.arange(frame_count+1))
 
 if __name__ == '__main__':
     app.exec_()
