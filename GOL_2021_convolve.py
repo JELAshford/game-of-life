@@ -18,7 +18,7 @@ import numpy as np
 # Test it out! Let's use 7, I like 9, 10, 3 as the comparison numbers :D
 
 # Declare world variables
-MAP_SIZE = 500
+MAP_SIZE = 2000
 grid = np.random.randint(0,2,(MAP_SIZE, MAP_SIZE))
 
 # Setup window to show images
@@ -33,7 +33,7 @@ win.show()
 def iterate(start_matrix, edges="fill"):
     """Convolve over grid then test for "alive" values"""
     counts = convolve2d(start_matrix, [[1, 1, 1], [1, 7, 1], [1, 1, 1]], boundary=edges, mode="same")
-    return (counts == 9) | (counts == 10) | (counts == 3)
+    return np.isin(counts, [9, 10, 3])
 
 # Run Indefinitely
 def update():
