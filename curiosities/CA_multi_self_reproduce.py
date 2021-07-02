@@ -19,11 +19,11 @@ grid[l:h, l:h, 2] = [
     [1, 0, 1],
     [0, 1, 0]
 ]
-# grid[l:h, l:h, 2] = [
-#     [1, 0, 1],
-#     [0, 0, 0],
-#     [1, 0, 1]
-# ]
+grid[l:h, l:h, 0] = [
+    [1, 1, 1],
+    [1, 0, 1],
+    [1, 1, 1]
+]
 
 # Setup window to show images
 app = pg.mkQApp()
@@ -61,7 +61,7 @@ def iterate(start_grid):
 
 # Run for x frames and then view
 frames = []
-for _ in range(100):
+for _ in range(300):
     frames.append(grid.copy())
     grid = iterate(grid)
 data = np.array(frames)
