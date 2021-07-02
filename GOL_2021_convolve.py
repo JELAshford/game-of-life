@@ -18,7 +18,7 @@ import numpy as np
 # Test it out! Let's use 7, I like 9, 10, 3 as the comparison numbers :D
 
 # Declare world variables
-MAP_SIZE = 500
+MAP_SIZE = 200
 grid = np.random.randint(0,2,(MAP_SIZE, MAP_SIZE))
 
 # Setup window to show images
@@ -39,7 +39,7 @@ def iterate(start_matrix, edges="fill"):
 def update():
     global grid
     grid = iterate(grid)
-    imv.setImage(grid)
+    imv.setImage(grid.T)
 timer = QtCore.QTimer()
 timer.timeout.connect(update)
 timer.start(20)
