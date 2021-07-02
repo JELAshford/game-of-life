@@ -18,7 +18,7 @@ import numpy as np
 # Test it out! Let's use 7, I like 9, 10, 3 as the comparison numbers :D
 
 # Declare world variables
-MAP_SIZE = 2000
+MAP_SIZE = 500
 grid = np.random.randint(0,2,(MAP_SIZE, MAP_SIZE))
 
 # Setup window to show images
