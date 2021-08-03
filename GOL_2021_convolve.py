@@ -15,6 +15,7 @@ import numpy as np
 #     off_values = [MID_VALUE + v for v in (1, 4, 5, 6, 7, 8)] + [1, 2, 4, 5, 6, 7, 8]
 #     if not np.any([v in off_values for v in on_values]): 
 #         print(f"Succes! {MID_VALUE} as value for centre works")
+#         print(f"Active Values: {on_values}")
 # Test it out! Let's use 7, I like 9, 10, 3 as the comparison numbers :D
 
 # Declare world variables
