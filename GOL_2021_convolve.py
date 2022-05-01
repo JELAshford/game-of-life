@@ -34,7 +34,7 @@ win.show()
 def iterate(start_matrix, edges="fill"):
     """Convolve over grid then test for "alive" values"""
     counts = convolve2d(start_matrix, [[1, 1, 1], [1, 7, 1], [1, 1, 1]], boundary=edges, mode="same")
-    return np.isin(counts, [9, 10, 3])
+    return np.isin(counts, [9, 10, 3]).astype(np.uint8)
 
 # Run Indefinitely
 def update():
