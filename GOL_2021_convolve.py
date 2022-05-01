@@ -1,7 +1,7 @@
 # Conway's Game of Life - Hopefully done better than 21 y/o James
 # (100x faster than original grid and set implementation)
 from scipy.signal import convolve2d
-from pyqtgraph.Qt import QtCore, QtGui
+from pyqtgraph.Qt import QtCore, QtWidgets
 import pyqtgraph as pg
 import numpy as np
 
@@ -24,7 +24,7 @@ grid = np.random.randint(0,2,(MAP_SIZE, MAP_SIZE))
 
 # Setup window to show images
 app = pg.mkQApp()
-win = QtGui.QMainWindow()
+win = QtWidgets.QMainWindow()
 win.setWindowTitle('GOL with Scipy')
 win.resize(800,800)
 imv = pg.ImageView()
