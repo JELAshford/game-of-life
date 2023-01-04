@@ -13,34 +13,40 @@ import numpy as np
 # for MID_VALUE in range(-10, 10):
 #     on_values = [MID_VALUE + 2, MID_VALUE + 3, 3]
 #     off_values = [MID_VALUE + v for v in (1, 4, 5, 6, 7, 8)] + [1, 2, 4, 5, 6, 7, 8]
-#     if not np.any([v in off_values for v in on_values]): 
+#     if not np.any([v in off_values for v in on_values]):
 #         print(f"Succes! {MID_VALUE} as value for centre works")
 #         print(f"Active Values: {on_values}")
 # Test it out! Let's use 7, I like 9, 10, 3 as the comparison numbers :D
 
 # Declare world variables
 MAP_SIZE = 200
-grid = np.random.randint(0,2,(MAP_SIZE, MAP_SIZE))
+grid = np.random.randint(0, 2, (MAP_SIZE, MAP_SIZE))
 
 # Setup window to show images
 app = pg.mkQApp()
 win = QtWidgets.QMainWindow()
 win.setWindowTitle('GOL with Scipy')
-win.resize(800,800)
+win.resize(800, 800)
 imv = pg.ImageView()
 win.setCentralWidget(imv)
 win.show()
 
+
 def iterate(start_matrix, edges="fill"):
     """Convolve over grid then test for "alive" values"""
-    counts = convolve2d(start_matrix, [[1, 1, 1], [1, 7, 1], [1, 1, 1]], boundary=edges, mode="same")
+    counts = convolve2d(start_matrix, [[1, 1, 1], [1, 7, 1], [
+                        1, 1, 1]], boundary=edges, mode="same")
     return np.isin(counts, [9, 10, 3]).astype(np.uint8)
 
 # Run Indefinitely
+
+
 def update():
     global grid
     grid = iterate(grid)
     imv.setImage(grid.T)
+
+
 timer = QtCore.QTimer()
 timer.timeout.connect(update)
 timer.start(20)
